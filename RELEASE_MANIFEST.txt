@@ -1,0 +1,164 @@
+Digital DiagPro Pilot Final v1.2.0 — Operational Review Edition
+Generated: 2026-07-14 (Asia/Riyadh)
+
+Scope:
+- Staff authentication, role separation, and in-app staff management
+- Walk-in vehicle intake in one workflow
+- Customer, vehicle, service, booking, work-order, diagnostic, approval, quality, document, and customer-portal modules
+- Work-order assignment, odometer, fuel, promised time, costs, discounts, tax, and internal notes
+- Service name/price/duration snapshots at booking time
+- Supabase migrations 001-010, RLS, Storage policies, and audit logs
+- Environment template and GitHub/Vercel deployment instructions
+
+Verification on source tree:
+- npm run lint: PASS (0 errors)
+- npm run typecheck: PASS (0 errors)
+- npm run test:run: PASS (25/25)
+- npm run build: PASS (exit 0)
+- npm audit: PASS (0 known vulnerabilities)
+- npm run verify:package: PASS
+- common secret pattern scan: PASS
+
+Important:
+- The current Supabase project already received the equivalent v1.2.0 operational updates.
+- Do not run ALL_MIGRATIONS.sql on the current production project.
+- ALL_MIGRATIONS.sql is for a new empty Supabase project only.
+- Confirm the admin email before first login and enable Leaked Password Protection/MFA when available.
+
+Files:
+.env.example
+.gitignore
+README.md
+RELEASE_MANIFEST.txt
+RELEASE_NOTES.md
+SETUP.md
+docs/ACCEPTANCE_CHECKLIST.md
+docs/DATABASE_SCHEMA.md
+docs/PILOT_WORKFLOW.md
+docs/RELEASE_SCOPE.md
+docs/SECURITY.md
+docs/TEST_RESULTS.md
+eslint.config.mjs
+next-env.d.ts
+next.config.ts
+package-lock.json
+package.json
+postcss.config.mjs
+public/icon.svg
+scripts/verify-package.mjs
+src/app/(public)/book/page.tsx
+src/app/(public)/layout.tsx
+src/app/(public)/more/page.tsx
+src/app/(public)/page.tsx
+src/app/(public)/services/page.tsx
+src/app/admin/(protected)/account/page.tsx
+src/app/admin/(protected)/approvals/page.tsx
+src/app/admin/(protected)/bookings/page.tsx
+src/app/admin/(protected)/customers/page.tsx
+src/app/admin/(protected)/diagnostics/page.tsx
+src/app/admin/(protected)/documents/page.tsx
+src/app/admin/(protected)/intake/page.tsx
+src/app/admin/(protected)/layout.tsx
+src/app/admin/(protected)/page.tsx
+src/app/admin/(protected)/quality/page.tsx
+src/app/admin/(protected)/services/page.tsx
+src/app/admin/(protected)/staff/page.tsx
+src/app/admin/(protected)/vehicles/page.tsx
+src/app/admin/(protected)/work-orders/page.tsx
+src/app/admin/login/page.tsx
+src/app/api/admin/approvals/[id]/route.ts
+src/app/api/admin/approvals/route.ts
+src/app/api/admin/bookings/[id]/convert/route.ts
+src/app/api/admin/bookings/[id]/status/route.ts
+src/app/api/admin/bookings/route.ts
+src/app/api/admin/customers/[id]/portal/route.ts
+src/app/api/admin/customers/[id]/route.ts
+src/app/api/admin/customers/route.ts
+src/app/api/admin/diagnostics/[id]/route.ts
+src/app/api/admin/diagnostics/route.ts
+src/app/api/admin/documents/[id]/route.ts
+src/app/api/admin/documents/route.ts
+src/app/api/admin/intake/route.ts
+src/app/api/admin/quality/route.ts
+src/app/api/admin/services/[id]/route.ts
+src/app/api/admin/services/route.ts
+src/app/api/admin/staff/[id]/route.ts
+src/app/api/admin/staff/route.ts
+src/app/api/admin/vehicles/[id]/route.ts
+src/app/api/admin/vehicles/route.ts
+src/app/api/admin/work-orders/[id]/details/route.ts
+src/app/api/admin/work-orders/[id]/status/route.ts
+src/app/api/admin/work-orders/route.ts
+src/app/api/customer/approvals/[id]/route.ts
+src/app/api/documents/[id]/download/route.ts
+src/app/api/public/bookings/route.ts
+src/app/customer/(protected)/layout.tsx
+src/app/customer/(protected)/page.tsx
+src/app/customer/login/page.tsx
+src/app/globals.css
+src/app/layout.tsx
+src/app/manifest.ts
+src/components/admin/admin-shell.tsx
+src/components/admin/approvals-manager.tsx
+src/components/admin/bookings-board.tsx
+src/components/admin/customers-manager.tsx
+src/components/admin/diagnostics-workspace.tsx
+src/components/admin/documents-manager.tsx
+src/components/admin/intake-form.tsx
+src/components/admin/page-header.tsx
+src/components/admin/quality-manager.tsx
+src/components/admin/services-manager.tsx
+src/components/admin/staff-manager.tsx
+src/components/admin/stat-card.tsx
+src/components/admin/vehicles-manager.tsx
+src/components/admin/work-orders-board.tsx
+src/components/auth/login-form.tsx
+src/components/customer/change-password-form.tsx
+src/components/customer/customer-approvals.tsx
+src/components/customer/customer-shell.tsx
+src/components/customer/unlinked-account.tsx
+src/components/layout/logo.tsx
+src/components/public/booking-form.tsx
+src/components/public/bottom-nav.tsx
+src/components/public/public-footer.tsx
+src/components/public/public-header.tsx
+src/components/ui/badge.tsx
+src/components/ui/button.tsx
+src/components/ui/empty-state.tsx
+src/components/ui/field.tsx
+src/components/ui/input.tsx
+src/components/ui/loading.tsx
+src/components/ui/select.tsx
+src/components/ui/textarea.tsx
+src/lib/api/responses.ts
+src/lib/auth/api-guards.ts
+src/lib/auth/guards.ts
+src/lib/domain/labels.ts
+src/lib/domain/quality.ts
+src/lib/domain/transitions.test.ts
+src/lib/domain/transitions.ts
+src/lib/domain/types.ts
+src/lib/domain/validators.test.ts
+src/lib/domain/validators.ts
+src/lib/env.ts
+src/lib/supabase/admin.ts
+src/lib/supabase/browser.ts
+src/lib/supabase/proxy.ts
+src/lib/supabase/server.ts
+src/lib/utils.ts
+src/proxy.ts
+supabase/ALL_MIGRATIONS.sql
+supabase/migrations/001_foundation.sql
+supabase/migrations/002_schema.sql
+supabase/migrations/003_functions_and_workflows.sql
+supabase/migrations/004_rls_policies.sql
+supabase/migrations/005_storage.sql
+supabase/migrations/006_pilot_seed.sql
+supabase/migrations/007_diagnostic_workflow.sql
+supabase/migrations/008_security_hardening_and_admin_bootstrap.sql
+supabase/migrations/009_pilot_operations_modules.sql
+supabase/migrations/010_operational_hardening.sql
+tsconfig.json
+tsconfig.tsbuildinfo
+vitest.config.ts
+vitest.setup.ts
