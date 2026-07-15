@@ -1,86 +1,90 @@
-# Digital DiagPro OS — Pilot V1
+# Digital DiagPro Pilot Final
 
-الأساس التقني لنظام تشغيل وإدارة رقمي مخصص مبدئيًا لـ **مركز التشخيص الاحترافي لصيانة السيارات** في حفر الباطن، مع قابلية التوسع مستقبلًا إلى منصة سحابية للورش.
+نسخة تشغيلية فعلية لمركز التشخيص الاحترافي، مبنية بـ **Next.js App Router + TypeScript + Tailwind CSS + Supabase** ومصممة للاستخدام اليومي من الجوال داخل الورشة.
 
-> الحالة الحالية: **Phase 0A / 0A.1 — Technical Foundation**
->
-> لا توجد في هذه النسخة وظائف حجز أو إدارة أو قاعدة بيانات، ولم يتم ربط Supabase أو Vercel بعد.
+الإصدار الحالي: **v1.2.0 — Operational Review Edition**.
 
-## التقنية المعتمدة
+هذا الإصدار هو Pilot لورشة واحدة. توجد بنية `workshop_id` وعزل بيانات عبر RLS لتسهيل التطوير لاحقًا، لكن الاشتراكات والفوترة وإدارة عدة ورش ليست ضمن النطاق الحالي.
 
-- Next.js 16.2.10 — App Router
-- React 19.2.7
-- TypeScript
-- Tailwind CSS v4
-- ESLint
-- npm
-- Node.js 24.x
+## النطاق التشغيلي
 
-## المتطلبات
+- تسجيل دخول الموظفين بالبريد وكلمة المرور.
+- أدوار فعلية: `admin` و`receptionist` و`technician` مع قوائم وصلاحيات مختلفة.
+- إدارة الموظفين من داخل النظام: إنشاء الحساب، تغيير الدور، إيقاف الحساب، وإعادة تعيين كلمة المرور.
+- صفحة **حسابي** لتغيير كلمة المرور المؤقتة.
+- استقبال سيارة حضورية في خطوة واحدة: عميل + سيارة + حجز وصول + أمر عمل.
+- إدارة العملاء: بحث، إضافة، تعديل، أرشفة، وتفعيل بوابة العميل.
+- إدارة السيارات: إضافة، تعديل، أرشفة، وربط بالعميل.
+- إدارة الخدمات: الاسم والوصف والسعر والمدة والترتيب والتفعيل.
+- تثبيت لقطة اسم الخدمة وسعرها ومدتها وقت الحجز لحماية السجل التاريخي.
+- حجز عام آمن عبر RPC مع منع التكرار السريع وحد استخدام أساسي لكل رقم جوال.
+- إدارة الحجوزات وتحويلها إلى أوامر عمل دون تكرار.
+- أوامر عمل تشمل: الفني المسؤول، العداد، الوقود، موعد التسليم، الأجور، القطع، الخصم، الضريبة والملاحظات.
+- مزامنة حالات الحجز مع دورة أمر العمل.
+- تقارير تشخيص تشمل DTC والنتائج والتوصيات والخلاصة الفنية وملخص العميل.
+- موافقات تشغيلية موثقة بالمبلغ والأعمال والقناة والقرار والوقت.
+- موافقة أو رفض العميل من بوابة العميل.
+- فحص جودة إلزامي بقائمة بنود محفوظة؛ لا يمكن الوصول إلى «جاهز» يدويًا.
+- مستندات خاصة مرتبطة بالعميل والسيارة والحجز وأمر العمل والتقرير.
+- بوابة عميل للحجوزات وأوامر العمل والموافقات والتقارير والمستندات.
+- Supabase Migrations وRLS وسياسات Storage وسجلات تدقيق.
 
-- Node.js 24.x
-- npm
-
-يحتوي المشروع على ملف `.nvmrc` لتحديد إصدار Node.js المستهدف.
-
-## التشغيل محليًا
+## التشغيل المحلي
 
 ```bash
-npm install
+npm ci
 cp .env.example .env.local
 npm run dev
 ```
 
-ثم افتح:
+المسارات الأساسية:
 
-```text
-http://localhost:3000
-```
+- الموقع: `http://localhost:3000`
+- الحجز: `http://localhost:3000/book`
+- دخول الموظفين: `http://localhost:3000/admin/login`
+- بوابة العميل: `http://localhost:3000/customer/login`
 
-## أوامر التحقق
-
-```bash
-npm run typecheck
-npm run lint
-npm run build
-```
+راجع [SETUP.md](./SETUP.md) قبل النشر.
 
 ## متغيرات البيئة
 
-الملف `.env.example` يوثق أسماء المتغيرات المستقبلية فقط، بدون أي قيم سرية:
-
-```text
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-لا تضف القيم الحقيقية إلى Git. استخدم `.env.local` محليًا أو إعدادات منصة النشر لاحقًا.
+`SUPABASE_SERVICE_ROLE_KEY` سري وخاص بالخادم فقط. لا تضع قبله `NEXT_PUBLIC_` ولا ترفعه إلى GitHub.
 
-## نطاق المرحلة الحالية
+## التحقق
 
-تم تنفيذ:
+```bash
+npm run lint
+npm run typecheck
+npm run test:run
+npm run build
+npm run verify:package
+```
 
-- Next.js App Router.
-- TypeScript.
-- Tailwind CSS v4.
-- ESLint.
-- واجهة تحقق تقنية عربية RTL.
-- تصميم Mobile-first.
-- دعم Safe Area للجوال.
-- الهوية الداكنة واللون الأساسي `#FFD100`.
-- أوامر `dev`, `build`, `lint`, `typecheck`.
+أو:
 
-لم يتم تنفيذ:
+```bash
+npm run check
+```
 
-- Supabase أو Vercel.
-- Database schema أو SQL أو Migrations أو RLS.
-- Authentication.
-- Admin portal أو Customer portal.
-- Customers أو Vehicles أو Bookings أو Work orders.
-- Documents أو Uploads.
-- `workshop_id` أو Multi-tenancy.
-- أي بيانات حقيقية أو Business workflows.
+## بنية المشروع
 
-## المرحلة التالية
+```text
+src/app/                    الصفحات وواجهات API
+src/components/             مكونات الإدارة والعميل والموقع العام
+src/lib/                    المصادقة والتحقق ومنطق التشغيل وSupabase
+supabase/migrations/        migrations مرتبة من 001 إلى 010
+supabase/ALL_MIGRATIONS.sql ملف مجمع لمشروع Supabase فارغ فقط
+docs/                       النطاق وسير العمل والأمان والاختبارات
+.env.example                قالب متغيرات بدون أسرار
+```
 
-المرحلة التالية بعد اعتماد هذا الأساس هي تصميم **Phase 0B — Pilot Scope, Domain Model, and Database Architecture** قبل كتابة أي SQL أو ربط قاعدة بيانات.
+## حدود الإصدار
+
+لا يتضمن: اشتراكات SaaS، بوابة دفع، مخزون ومحاسبة كاملة، WhatsApp Business API، تطبيق جوال أصلي، أو منصة مركزية متعددة الورش. القرار هو تشغيل الـPilot ببيانات حقيقية أولًا ثم تطوير ما يثبت الاحتياج إليه.
